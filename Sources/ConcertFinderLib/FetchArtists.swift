@@ -46,11 +46,10 @@ public class FetchArtists {
 
         getTopArtists(period: timePeriod) { (result: Result) in
             switch result {
-            case .success(let result):
-                resultString = result
-            case .failure(let literalError):
-                print("in here")
-                error = literalError
+            case .success(let callbackResult):
+                resultString = callbackResult
+            case .failure(let callbackError):
+                error = callbackError
             }
             waitTask.signal()
         }
