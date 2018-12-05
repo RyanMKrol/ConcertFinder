@@ -9,7 +9,7 @@ import Foundation
 import ConcertFinderLib
 
 do {
-    try FetchArtists.getYearlyTopArtists()
+    let artists = try FetchArtists.getFinishedArtistList(username: "somethingmeaty")
 } catch {
     
 }
