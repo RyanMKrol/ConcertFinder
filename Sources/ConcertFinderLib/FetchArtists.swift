@@ -28,8 +28,14 @@ public class FetchArtists {
     }
 
     private static let apiKey = "deaf44dd2b81aa5bae31374e60ebd91c"
-    private static let resultLimit = 1000
+    private static let resultLimit = 100
 
+    /**
+     Gets the top artists across for the user, across a range of listening periods
+
+     - Parameter username: The user to check the top artists for
+     - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     */
     public static func getFinishedArtistList(username: String) throws -> Set<String> {
         let overallArtists = try getOverallTopArtists(username: username)
         let yearlyArtists = try getYearlyTopArtists(username: username)
@@ -39,6 +45,12 @@ public class FetchArtists {
         return monthlyArtists.union(halfYearlyArtists).union(yearlyArtists).union(overallArtists)
     }
 
+    /**
+     Gets the top artists across the user's month year of listening
+
+     - Parameter username: The user to check the top artists for
+     - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     */
     public static func getMonthlyTopArtists(username: String) throws -> Set<String> {
         let monthlyMinPlaysEntry = 30
         let period = APITimePeriod.OneMonth.rawValue
@@ -50,6 +62,12 @@ public class FetchArtists {
         )
     }
 
+    /**
+     Gets the top artists across the user's last half-year of listening
+
+     - Parameter username: The user to check the top artists for
+     - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     */
     public static func getHalfYearlyTopArtists(username: String) throws -> Set<String> {
         let halfYearlyMinPlaysEntry = 50
         let period = APITimePeriod.SixMonth.rawValue
@@ -61,6 +79,12 @@ public class FetchArtists {
         )
     }
 
+    /**
+     Gets the top artists across the user's last year of listening
+
+     - Parameter username: The user to check the top artists for
+     - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     */
     public static func getYearlyTopArtists(username: String) throws -> Set<String> {
         let yearlyMinPlaysEntry = 70
         let period = APITimePeriod.TwelveMonth.rawValue
@@ -72,6 +96,12 @@ public class FetchArtists {
         )
     }
 
+    /**
+     Gets the top artists across the user's entire listening history
+
+     - Parameter username: The user to check the top artists for
+     - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     */
     public static func getOverallTopArtists(username: String) throws -> Set<String> {
         let overallMinPlaysEntry = 100
         let period = APITimePeriod.Overall.rawValue
@@ -83,6 +113,14 @@ public class FetchArtists {
         )
     }
 
+    /**
+     Grabs the artists filtered by the number of song plays
+
+     - Parameter username: The user to check the top artists for
+     - Parameter minPlaysThreshold: The threshold, above which artists should be included in the reuslt
+     - Parameter listeningPeriod: The time period to check the top artists for
+     - returns: A list of artists that fit the criteria of song plays
+     */
     private static func getFilteredArtists(
         username: String,
         minPlaysThreshold: Int,
@@ -97,6 +135,13 @@ public class FetchArtists {
         return Set(validArtistNames)
     }
 
+    /**
+     A wrapper for calling the LastFM API, will handle data, and exceptions
+
+     - Parameter period: The time period to check the top artists for
+     - Parameter username: The user to check the top artists for
+     - returns: The response from the API
+     */
     private static func apiWrapper(timePeriod: String, username: String) throws -> GetTopArtistsResponse {
         var apiResult: GetTopArtistsResponse? = nil
         var error: Error? = nil
@@ -122,6 +167,14 @@ public class FetchArtists {
 
     }
 
+    /**
+     Hits the LastFM GetTopArtists API for details on the top artists for a given user,
+     and a given time period
+
+     - Parameter period: The time period to check the top artists for
+     - Parameter username: The user to check the top artists for
+     - Parameter completion: The callback to call once the data has been handled (or not)
+     */
     private static func getTopArtists(period: String, username: String, completion: @escaping (Result<GetTopArtistsResponse>) -> Void) {
         let waitTask = DispatchSemaphore(value: 0)
         let apiString = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(period)&limit=\(resultLimit)"

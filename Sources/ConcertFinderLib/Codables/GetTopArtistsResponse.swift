@@ -72,6 +72,12 @@ struct ArtistInfo: Decodable {
     private let playCount: String
     private let attributes: JSON
 
+    /**
+     Getter for the rank for a given artist
+
+     - returns: The rank for a given artist
+     - throws: When the rank cannot be parsed
+     */
     func getRank() throws -> Int {
         guard let rankString = attributes["rank"].string, let rank = Int(rankString) else {
             throw ResponseError.NoRank
@@ -80,6 +86,12 @@ struct ArtistInfo: Decodable {
         return rank
     }
 
+    /**
+     Getter for the play count for a given artist
+
+     - returns: The play count for a given artist
+     - throws: When the play count cannot be parsed
+     */
     func getPlayCount() throws -> Int {
         guard let playCountInt = Int(playCount) else {
             throw ResponseError.NoPlayCount
@@ -88,6 +100,11 @@ struct ArtistInfo: Decodable {
         return playCountInt
     }
 
+    /**
+     Getter for the name of a given artist
+
+     - returns: The name of a given artist
+     */
     func getName() -> String {
         return name
     }
