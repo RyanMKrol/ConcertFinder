@@ -10,15 +10,12 @@ import Foundation
 
 public class Artist {
 
-    enum ArtistError: Error {
-        case NoId
-    }
-
     private let name: String
-    private var identifier: String? = nil
+    private let identifier: Int
 
-    init(name: String) {
+    init(name: String, identifier: Int) {
         self.name = name
+        self.identifier = identifier
     }
 
     /**
@@ -26,18 +23,8 @@ public class Artist {
 
      - returns: The name of the artist
      */
-    func getName() -> String {
+    public func getName() -> String {
         return self.name
-    }
-
-    /**
-     Set the artist ID
-
-     - Parameter period: The identifier of the artist
-     - throws: An exception if no ID exists
-     */
-    func setId(identifier: String) {
-        self.identifier = identifier
     }
 
     /**
@@ -46,12 +33,8 @@ public class Artist {
      - returns: The ID of an artist
      - throws: An exception if no ID exists
      */
-    func getId() throws -> String {
-        guard let id = self.identifier else {
-            throw ArtistError.NoId
-        }
-
-        return id
+    public func getId() -> Int {
+        return self.identifier
     }
 
 }

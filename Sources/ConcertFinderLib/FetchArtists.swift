@@ -126,7 +126,8 @@ public class FetchArtists {
         minPlaysThreshold: Int,
         listeningPeriod: String
     ) throws -> Set<String> {
-        let topArtists = try apiWrapper(timePeriod: listeningPeriod, username: username)
+        let url = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(listeningPeriod)&limit=\(resultLimit)"
+        let topArtists = try ServiceWrapper.callService(urlString: url, responseType: GetTopArtistsResponse.self)
 
         let validArtistNames = try topArtists.getArtists().filter({ (artist) -> Bool in
             return try artist.getPlayCount() > minPlaysThreshold
@@ -134,66 +135,4 @@ public class FetchArtists {
 
         return Set(validArtistNames)
     }
-
-    /**
-     A wrapper for calling the LastFM API, will handle data, and exceptions
-
-     - Parameter period: The time period to check the top artists for
-     - Parameter username: The user to check the top artists for
-     - returns: The response from the API
-     */
-    private static func apiWrapper(timePeriod: String, username: String) throws -> GetTopArtistsResponse {
-        var apiResult: GetTopArtistsResponse? = nil
-        var error: Error? = nil
-
-        getTopArtists(period: timePeriod, username: username) { (result: Result) in
-            switch result {
-            case .success(let callbackResult):
-                apiResult = callbackResult
-            case .failure(let callbackError):
-                error = callbackError
-            }
-        }
-
-        if let error = error {
-            throw error
-        }
-
-        guard let result = apiResult else {
-            throw APIError.CouldNotGetData
-        }
-
-        return result
-    }
-
-    /**
-     Hits the LastFM GetTopArtists API for details on the top artists for a given user,
-     and a given time period
-
-     - Parameter period: The time period to check the top artists for
-     - Parameter username: The user to check the top artists for
-     - Parameter completion: The callback to call once the data has been handled (or not)
-     */
-    private static func getTopArtists(period: String, username: String, completion: @escaping (Result<GetTopArtistsResponse>) -> Void) {
-        let waitTask = DispatchSemaphore(value: 0)
-        let apiString = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(period)&limit=\(resultLimit)"
-
-        guard let url = URL(string: apiString) else {
-            return completion(.failure(APIError.CouldNotBuildURL))
-        }
-
-        let session = URLSession.shared
-        session.dataTask(with: url) { (data, response, error) in
-            defer { waitTask.signal() }
-            completion(Result {
-                guard let data = data else {
-                    throw APIError.CouldNotGetData
-                }
-                return try JSONDecoder().decode(GetTopArtistsResponse.self, from: data)
-            })
-        }.resume()
-
-        waitTask.wait()
-    }
-
 }

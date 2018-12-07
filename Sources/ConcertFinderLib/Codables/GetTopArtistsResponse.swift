@@ -23,10 +23,20 @@ public struct GetTopArtistsResponse: Decodable {
 
     private let topArtists: TopArtists
 
+    /**
+     Get the response artists
+
+     - returns: response artists
+     */
     func getArtists() -> [ArtistInfo] {
         return topArtists.artists
     }
 
+    /**
+     Get the response attributes
+
+     - returns: response attributes
+     */
     func getResponseAttributes() -> ResponseAttributes {
         return topArtists.attributes
     }
@@ -41,6 +51,12 @@ struct ResponseAttributes: Decodable {
 
     private let totalArtists: String
 
+    /**
+     Get the total number of artists in the response
+
+     - returns: The number of artists
+     - throws: When the number of artists can't be parsed
+     */
     func getTotalArtists() throws -> Int {
         guard let totalArtists = Int(totalArtists) else {
             throw ResponseError.NoTotalArtists
