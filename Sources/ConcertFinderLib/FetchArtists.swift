@@ -164,7 +164,6 @@ public class FetchArtists {
         }
 
         return result
-
     }
 
     /**
