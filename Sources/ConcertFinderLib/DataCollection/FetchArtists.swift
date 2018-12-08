@@ -27,7 +27,7 @@ public class FetchArtists {
     }
 
     private static let apiKey = "deaf44dd2b81aa5bae31374e60ebd91c"
-    private static let resultLimit = 100
+    private static let resultLimit = 350
 
     /**
      Gets the top artists across for the user, across a range of listening periods
