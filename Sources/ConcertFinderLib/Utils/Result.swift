@@ -4,7 +4,7 @@
 //
 //  Created by Ryan Krol on 04/12/2018.
 //
-//  TV - It's Always Sunny in Philadelphia - Season 10 - Episode 6
+//  TV: It's Always Sunny in Philadelphia - Season 10 - Episode 6
 
 import Foundation
 

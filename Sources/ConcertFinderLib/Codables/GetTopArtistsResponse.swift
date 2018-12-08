@@ -4,7 +4,7 @@
 //
 //  Created by Ryan Krol on 04/12/2018.
 //
-//  TV - Ashes To Ashes - Season 1 - Episode 2
+//  TV: Ashes To Ashes - Season 1 - Episode 2
 
 import Foundation
 import SwiftyJSON

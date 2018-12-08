@@ -4,7 +4,7 @@
 //
 //  Created by Ryan Krol on 07/12/2018.
 //
-//  TV - Ashes To Ashes - Season 1 - Episode 8
+//  TV: Ashes To Ashes - Season 1 - Episode 8
 
 import Foundation
 import SwiftyJSON
@@ -36,6 +36,7 @@ public class ServiceWrapper {
             case .success(let callbackResult):
                 apiResult = callbackResult
             case .failure(let callbackError):
+                print("There's an issue doing something with this: \(responseType)")
                 error = callbackError
             }
         }

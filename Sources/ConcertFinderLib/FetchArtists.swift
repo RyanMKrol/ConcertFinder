@@ -4,10 +4,9 @@
 //
 //  Created by Ryan Krol on 03/12/2018.
 //
-//  TV - Life On Mars - Season 2 - Episode 8
+//  TV: Life On Mars - Season 2 - Episode 8
 
 import Foundation
-import SwiftyJSON
 
 public class FetchArtists {
 

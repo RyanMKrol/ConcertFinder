@@ -4,15 +4,11 @@
 //
 //  Created by Ryan Krol on 07/12/2018.
 //
-//  TV - Ashes To Ashes - Season 1 - Episode 8
+//  TV: Ashes To Ashes - Season 1 - Episode 8
 
 import Foundation
 
 struct FetchArtistInformationResponse: Decodable {
-
-    enum SongKickError: Error {
-        case StatusNotOK(response: String)
-    }
 
     enum CodingKeys: String, CodingKey {
         case results = "resultsPage"
@@ -30,12 +26,25 @@ struct FetchArtistInformationResponse: Decodable {
     }
 
     /**
+     Gets whether the status is valid
+
+     - returns: whether the status is valid
+     */
+    func isValidStatus() -> Bool {
+        return self.results.status == SongKickAPIConstants.expectedResponseStatus
+    }
+
+    /**
      Get the ID of the first artist in the response
 
      - returns: the arist's ID
      */
-    func getId() -> Int {
-        return self.results.results.artists[0].id
+    func getId() -> Int? {
+        guard let artists = self.results.results.artists, artists.count > 0 else {
+            return nil
+        }
+
+        return artists[0].id
     }
 }
 
@@ -54,7 +63,7 @@ private struct SongKickArtists: Decodable {
         case artists = "artist"
     }
 
-    let artists: [SongKickArtist]
+    let artists: [SongKickArtist]?
 }
 
 private struct SongKickArtist: Decodable {
