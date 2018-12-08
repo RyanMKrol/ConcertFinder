@@ -17,6 +17,7 @@ public struct Config: Decodable {
 
 public struct ConfigUser: Decodable {
     public let cities: [String]
+    public let countries: [String]
     public let username: String
     public let filterCitiesBycountries: [String]
     private let listeningThresholds: ListeningThresholds

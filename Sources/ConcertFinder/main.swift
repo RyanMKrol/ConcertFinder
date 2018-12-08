@@ -28,6 +28,7 @@ do {
         let artistConcertInfo = try FetchConcertInformation.getArtistsConertInformation(
             cities: user.cities,
             filterCitiesBycountries: user.filterCitiesBycountries,
+            countries: user.countries,
             artists: artistInfo
         )
 

@@ -28,6 +28,7 @@ public class FetchConcertInformation {
     public static func getArtistsConertInformation(
         cities: [String],
         filterCitiesBycountries: [String],
+        countries: [String],
         artists: [Artist]
     ) throws -> [String:[Event]] {
 
@@ -45,8 +46,12 @@ public class FetchConcertInformation {
                     cities: cities,
                     event: concert
                 )
+                let matchingCountry = isMatchingCountry(
+                    countries: countries,
+                    event: concert
+                )
 
-                return !finished && validStatus && matchingCity
+                return !finished && validStatus && (matchingCity || matchingCountry)
             }
 
             artistEvents[artist.getName()] = filteredConcertInfo
@@ -55,6 +60,44 @@ public class FetchConcertInformation {
         return artistEvents
     }
 
+    /**
+     Checks if the event is taking place in our list of supported countries
+
+     - Parameter countries: The countries that the event should take place in
+     - Parameter event: The event we're checking
+
+     - returns: If the event is taking place in our countries
+     */
+    private static func isMatchingCountry(
+        countries: [String],
+        event: Event
+    ) -> Bool {
+        let eventCity = event.getLocation()
+
+        // filter the response using all cities for a user
+        let isMatchingCountry = countries.map({ (country) -> Bool in
+            var matches = 0
+
+            // match on both the country and the city
+            for country in countries {
+                matches += RegexMatcher.numMatches(pattern: ".*\(country).*", target: eventCity)
+            }
+
+            return matches > 0
+        }).contains(true)
+
+        return isMatchingCountry
+    }
+
+    /**
+     Checks if the event is taking place in our list of supported cities
+
+     - Parameter countries: The countries that these cities can be in
+     - Parameter cities: The cities that we want the event to be in
+     - Parameter event: The event we're checking
+
+     - returns: If the event is taking place in our cities
+     */
     private static func isMatchingCity(
         countries: [String],
         cities: [String],
@@ -66,17 +109,22 @@ public class FetchConcertInformation {
         let isMatchingCity = cities.map({ (city) -> Bool in
             var matches = 0
 
-            // match on both the country and the city
-            for country in countries {
-                let regex = try? NSRegularExpression(
-                    pattern: ".*\(city).*, \(country).*",
-                    options: .caseInsensitive
+            if countries.count > 0 {
+
+                // match on both the country and the city
+                for country in countries {
+                    matches += RegexMatcher.numMatches(
+                        pattern: ".*\(city).*, \(country).*",
+                        target: eventCity
+                    )
+                }
+            } else {
+
+                // match on just the city
+                matches += RegexMatcher.numMatches(
+                    pattern: ".*\(city).*.*",
+                    target: eventCity
                 )
-                matches += regex?.numberOfMatches(
-                    in: eventCity,
-                    options: [],
-                    range: NSRange(location: 0, length: eventCity.count)
-                ) ?? 0
             }
 
             return matches > 0

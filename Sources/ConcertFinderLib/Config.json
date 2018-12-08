@@ -9,6 +9,9 @@
                 "filterCitiesBycountries": [
                     "UK"
                 ],
+                "countries": [
+                    "UK"
+                ],
                 "listeningThresholds": {
                     "1month": 25,
                     "6month": 40,
@@ -24,6 +27,9 @@
                 ],
                 "filterCitiesBycountries": [
                     "UK"
+                ],
+                "countries": [
+                    "US"
                 ],
                 "listeningThresholds": {
                     "1month": 20,
