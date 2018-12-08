@@ -10,5 +10,6 @@ import Foundation
 
 public enum CommonError: Error {
     case CouldNotLoadConfig
-    case NoListeningThresholdsFound
+    case NoListeningThresholdsFound(response: String)
+    case NoMatchingLocations(response: String)
 }

@@ -9,21 +9,90 @@
 import Foundation
 
 public struct Config: Decodable {
+
     enum CodingKeys: String, CodingKey {
         case users = "users"
     }
-    public let users: [ConfigUser]
+
+    private let users: [ConfigUser]
+
+    /**
+     Returns the users in the config, first validating whether the entries are valid
+
+     - returns: The users found in the config
+     - throws: When the config entry for any user is invalid
+     */
+    public func getUsers() throws -> [ConfigUser] {
+        try self.isValidConfig()
+        return self.users
+    }
+
+    /**
+     Returns whether the config value we have is valid
+
+     - returns: A boolean indicating a valid/invalid config
+     */
+    public func isValidConfig() throws {
+        for user in self.users {
+            let citiesCount = user.getCities().count
+            let countriesCount = user.getCountries().count
+            let listeningThresholdsCount = user.getListeningThresholds().count
+
+            if citiesCount + countriesCount == 0 {
+                throw CommonError.NoMatchingLocations(
+                    response: "You don't have any locations to track. # Cities = \(citiesCount), #Countries = \(countriesCount)"
+                )
+            }
+
+            if listeningThresholdsCount == 0 {
+                throw CommonError.NoListeningThresholdsFound(response: "You don't have any thresholds defined to collect artists with.")
+            }
+        }
+    }
 }
 
 public struct ConfigUser: Decodable {
-    public let cities: [String]
-    public let countries: [String]
+    private let cities: [String]?
+    private let countries: [String]?
     public let username: String
-    public let filterCitiesBycountries: [String]
+    private let filterCitiesBycountries: [String]?
     private let listeningThresholds: ListeningThresholds
 
-    public func getListeningThresholds() throws -> [String:Int] {
-        return try self.listeningThresholds.getThresholds()
+    /**
+     Gets the cities we're tracking concerts for
+
+     - returns: The cities we're tracking
+     */
+    public func getCities() -> [String] {
+        return self.cities ?? []
+    }
+
+    /**
+     Gets the countries we're tracking concerts for
+
+     - returns: The countries we're tracking
+     */
+    public func getCountries() -> [String] {
+        return self.countries ?? []
+    }
+
+    /**
+     Gets the countries to filter cities by
+
+     - returns: The filtering countries
+     */
+    public func getFilteringCountries() -> [String] {
+        return self.filterCitiesBycountries ?? []
+    }
+
+    /**
+     Gets the listening thresholds
+
+     - returns: The listening thresholds
+     - throws: When the config has no listening periods defined
+     */
+    public func getListeningThresholds() -> [String:Int] {
+        return self.listeningThresholds.getThresholds()
     }
 }
 
@@ -44,7 +113,13 @@ private struct ListeningThresholds: Decodable {
     private let oneYear: Int?
     private let overall: Int?
 
-    public func getThresholds() throws -> [String:Int] {
+    /**
+     Gets the listening thresholds
+
+     - returns: The listening thresholds
+     - throws: When the config has no listening periods defined
+     */
+    public func getThresholds() -> [String:Int] {
 
         let dict: [String: Int] = [
             CodingKeys.sevenDay.rawValue: self.sevenDay,
@@ -54,10 +129,6 @@ private struct ListeningThresholds: Decodable {
             CodingKeys.oneYear.rawValue: self.oneYear,
             CodingKeys.overall.rawValue: self.overall
         ].filter({$0.value != nil}) as! [String:Int]
-
-        guard dict.count > 0 else {
-            throw CommonError.NoListeningThresholdsFound
-        }
 
         return dict
     }

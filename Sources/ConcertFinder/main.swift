@@ -11,7 +11,7 @@ import ConcertFinderLib
 do {
     let config = try ConfigLoader.load()
 
-    for user in config.users {
+    for user in try config.getUsers() {
 
         print("******************")
         print("Data for user: \(user.username)")
@@ -26,9 +26,9 @@ do {
         )
 
         let artistConcertInfo = try FetchConcertInformation.getArtistsConertInformation(
-            cities: user.cities,
-            filterCitiesBycountries: user.filterCitiesBycountries,
-            countries: user.countries,
+            cities: user.getCities(),
+            filterCitiesBycountries: user.getFilteringCountries(),
+            countries: user.getCountries(),
             artists: artistInfo
         )
 
