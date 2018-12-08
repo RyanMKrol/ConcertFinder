@@ -85,7 +85,7 @@ public class ServiceWrapper {
                 }
                 return try JSONDecoder().decode(T.self, from: data)
             })
-            }.resume()
+        }.resume()
 
         waitTask.wait()
     }

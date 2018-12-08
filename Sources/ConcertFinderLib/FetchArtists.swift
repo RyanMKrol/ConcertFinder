@@ -33,7 +33,9 @@ public class FetchArtists {
      Gets the top artists across for the user, across a range of listening periods
 
      - Parameter username: The user to check the top artists for
+     - Parameter listeningThresholds: The thresholds we'll use for a given user
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     - throws: When we fail to get the artist data
      */
     public static func getFinishedArtistList(
         username: String,
@@ -63,7 +65,9 @@ public class FetchArtists {
      Gets the top artists across the user's month year of listening
 
      - Parameter username: The user to check the top artists for
+     - Parameter threshold: The threshold we'll use for a given user
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     - throws: When we fail to get the artist data
      */
     public static func getMonthlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
         let monthlyMinPlaysEntry = threshold
@@ -80,7 +84,9 @@ public class FetchArtists {
      Gets the top artists across the user's last half-year of listening
 
      - Parameter username: The user to check the top artists for
+     - Parameter threshold: The threshold we'll use for a given user
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     - throws: When we fail to get the artist data
      */
     public static func getHalfYearlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
         let halfYearlyMinPlaysEntry = threshold
@@ -97,7 +103,9 @@ public class FetchArtists {
      Gets the top artists across the user's last year of listening
 
      - Parameter username: The user to check the top artists for
+     - Parameter threshold: The threshold we'll use for a given user
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     - throws: When we fail to get the artist data
      */
     public static func getYearlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
         let yearlyMinPlaysEntry = threshold
@@ -114,7 +122,9 @@ public class FetchArtists {
      Gets the top artists across the user's entire listening history
 
      - Parameter username: The user to check the top artists for
+     - Parameter threshold: The threshold we'll use for a given user
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
+     - throws: When we fail to get the artist data
      */
     public static func getOverallTopArtists(username: String, threshold: Int) throws -> Set<String> {
         let overallMinPlaysEntry = threshold
@@ -133,7 +143,8 @@ public class FetchArtists {
      - Parameter username: The user to check the top artists for
      - Parameter minPlaysThreshold: The threshold, above which artists should be included in the reuslt
      - Parameter listeningPeriod: The time period to check the top artists for
-     - returns: A list of artists that fit the criteria of song plays
+     - returns: A set of artists that fit the criteria of song plays
+     - throws: When we fail to get the artist data
      */
     private static func getFilteredArtists(
         username: String,

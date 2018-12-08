@@ -19,9 +19,10 @@ public class FetchConcertInformation {
     /**
      Retrieves upcoming concert information for an artist
 
-     - Parameter city: The city we want to find concerts in
+     - Parameter cities: The cities we want to find concerts in
      - Parameter artists: The artists we're finding information for
      - returns: A dictionary of artists and their upcoming events
+     - throws: When we fail to get the concert data
      */
     public static func getArtistsConertInformation(
         cities: [String],
@@ -39,6 +40,7 @@ public class FetchConcertInformation {
                 let validStatus = concert.isValidStatus()
                 let eventCity = concert.getLocation()
 
+                // filter the response using all cities for a user
                 let matchingCity = cities.map({ (city) -> Bool in
                     let regex = try? NSRegularExpression(
                         pattern: ".*\(city).*",
@@ -69,6 +71,7 @@ public class FetchConcertInformation {
      - Parameter pageNum: The page number of the API response we're looking at
      - Parameter results: The accumulator to store our results between API calls
      - returns: An array of events for the given artist
+     - throws: When we fail to get the concert data
      - note: We're using Tail-Recursion in the hope that the compiler optimises
      our function stacks for us
      */

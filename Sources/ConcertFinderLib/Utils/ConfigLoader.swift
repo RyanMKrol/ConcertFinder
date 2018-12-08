@@ -13,14 +13,16 @@ import SwiftyJSON
 public class ConfigLoader {
 
     private static let topLevelConfigKey = "config"
+    private static let configFile = "/Users/ryankrol/Desktop/ConcertFinder/Sources/ConcertFinderLib/config.json"
 
+    /**
+     Loads the application config
+
+     - returns: The application configuration
+     */
     public static func load() throws -> Config {
+        let manager = ConfigurationManager().load(file: configFile)
 
-        let manager = ConfigurationManager().load(
-            file: "/Users/ryankrol/Desktop/ConcertFinder/Sources/ConcertFinderLib/config.json"
-        )
-
-        // Load our Config
         guard let users = manager[topLevelConfigKey] else {
             throw CommonError.CouldNotLoadConfig
         }
