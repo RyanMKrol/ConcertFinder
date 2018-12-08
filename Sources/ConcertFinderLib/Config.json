@@ -2,7 +2,7 @@
     "config": {
         "users": [
             {
-                "username": "somethingmeaty",
+                "username": "example",
                 "cities": [
                     "London", "Nottingham", "Birmingham"
                 ],
@@ -18,26 +18,7 @@
                     "1year": 60,
                     "overall": 80,
                 },
-                "emailList": ["ryankrol.m@gmail.com"],
-            },
-            {
-                "username": "wztan",
-                "cities": [
-                    "London", "Nottingham", "Birmingham"
-                ],
-                "filterCitiesBycountries": [
-                    "UK"
-                ],
-                "countries": [
-                    "US"
-                ],
-                "listeningThresholds": {
-                    "1month": 20,
-                    "6month": 35,
-                    "1year": 60,
-                    "overall": 80,
-                },
-                "emailList": ["ryankrol@hotmail.co.uk"],
+                "emailList": ["example@gmail.com"],
             },
         ]
     }

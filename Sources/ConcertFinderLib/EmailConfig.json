@@ -1,0 +1,7 @@
+{
+    "config": {
+        "emailAccount": "example@gmail.com",
+        "password": "example",
+        "hostName": "smtp.gmail.com",
+    }
+}

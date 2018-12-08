@@ -57,6 +57,7 @@ public struct ConfigUser: Decodable {
     public let username: String
     private let filterCitiesBycountries: [String]?
     private let listeningThresholds: ListeningThresholds
+    public let emailList: [String]
 
     /**
      Gets the cities we're tracking concerts for

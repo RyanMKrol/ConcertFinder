@@ -14,22 +14,42 @@ public class ConfigLoader {
 
     private static let topLevelConfigKey = "config"
     private static let configFile = "/Users/ryankrol/Desktop/ConcertFinder/Sources/ConcertFinderLib/config.json"
+    private static let emailConfigFile = "/Users/ryankrol/Desktop/ConcertFinder/Sources/ConcertFinderLib/emailConfig.json"
 
     /**
      Loads the application config
 
      - returns: The application configuration
      */
-    public static func load() throws -> Config {
+    public static func loadAppConfig() throws -> Config {
         let manager = ConfigurationManager().load(file: configFile)
 
-        guard let users = manager[topLevelConfigKey] else {
-            throw CommonError.CouldNotLoadConfig
+        guard let appConfig = manager[topLevelConfigKey] else {
+            throw CommonError.CouldNotLoadAppConfig
         }
 
-        let jsonUsers = JSON(users)
-        let jsonData = try jsonUsers.rawData()
+        let jsonConfig = JSON(appConfig)
+        let jsonData = try jsonConfig.rawData()
         let config = try JSONDecoder().decode(Config.self, from: jsonData)
+
+        return config
+    }
+
+    /**
+     Loads the email config
+
+     - returns: The application configuration
+     */
+    public static func loadEmailConfig() throws -> EmailConfig {
+        let manager = ConfigurationManager().load(file: emailConfigFile)
+
+        guard let emailConfig = manager[topLevelConfigKey] else {
+            throw CommonError.CouldNotLoadEmailConfig
+        }
+
+        let jsonConfig = JSON(emailConfig)
+        let jsonData = try jsonConfig.rawData()
+        let config = try JSONDecoder().decode(EmailConfig.self, from: jsonData)
 
         return config
     }
