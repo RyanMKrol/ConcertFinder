@@ -12,7 +12,8 @@ A tool to keep you updated with concerts from artists you regularly listen to.
  * Make the following changes to this [file](https://github.com/RyanMKrol/ConcertFinder/blob/master/Sources/ConcertFinderLib/Config.json):
    * Add your username
    * Add the cities you'd like to track concerts for
-   * Add the country you'd like to track concerts for (i.e. a value of UK would then filter out cities from other countries with the same name -  Birmingham, USA vs Birmingham, UK)
+   * Add the country you'd like to track concerts for
+   * Add "filter" countries you'd like to use to make sure cities are in the right country (i.e. a value of UK would then filter out cities from other countries with the same name -  Birmingham, USA vs Birmingham, UK)
    * Add your listening thresholds (for each time period, the number indicates the minimum required listens to track the artist)
  * You also need to add your mail server details in this [file](https://github.com/RyanMKrol/ConcertFinder/blob/master/Sources/ConcertFinderLib/EmailConfig.json):
    * You can add an application password for gmail accounts [here](https://myaccount.google.com/apppasswords)
