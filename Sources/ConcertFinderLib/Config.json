@@ -6,7 +6,7 @@
                 "cities": [
                     "London", "Nottingham", "Birmingham"
                 ],
-                "countries": [
+                "filterCitiesBycountries": [
                     "UK"
                 ],
                 "listeningThresholds": {
@@ -22,7 +22,7 @@
                 "cities": [
                     "London", "Nottingham", "Birmingham"
                 ],
-                "countries": [
+                "filterCitiesBycountries": [
                     "UK"
                 ],
                 "listeningThresholds": {
