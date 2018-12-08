@@ -13,7 +13,7 @@ public class FetchArtists {
     // API Details
     //  - https://www.last.fm/api/show/user.getTopArtists
 
-    enum APITimePeriod: String {
+    public enum APITimePeriod: String {
         case Overall = "overall"
         case TwelveMonth = "12month"
         case SixMonth = "6month"
@@ -35,11 +35,26 @@ public class FetchArtists {
      - Parameter username: The user to check the top artists for
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
      */
-    public static func getFinishedArtistList(username: String) throws -> Set<String> {
-        let overallArtists = try getOverallTopArtists(username: username)
-        let yearlyArtists = try getYearlyTopArtists(username: username)
-        let halfYearlyArtists = try getHalfYearlyTopArtists(username: username)
-        let monthlyArtists = try getMonthlyTopArtists(username: username)
+    public static func getFinishedArtistList(
+        username: String,
+        listeningThresholds: ListeningThresholds
+    ) throws -> Set<String> {
+        let overallArtists = try getOverallTopArtists(
+            username: username,
+            threshold: listeningThresholds.overall
+        )
+        let yearlyArtists = try getYearlyTopArtists(
+            username: username,
+            threshold: listeningThresholds.oneYear
+        )
+        let halfYearlyArtists = try getHalfYearlyTopArtists(
+            username: username,
+            threshold: listeningThresholds.sixMonth
+        )
+        let monthlyArtists = try getMonthlyTopArtists(
+            username: username,
+            threshold: listeningThresholds.oneMonth
+        )
 
         return monthlyArtists.union(halfYearlyArtists).union(yearlyArtists).union(overallArtists)
     }
@@ -50,8 +65,8 @@ public class FetchArtists {
      - Parameter username: The user to check the top artists for
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
      */
-    public static func getMonthlyTopArtists(username: String) throws -> Set<String> {
-        let monthlyMinPlaysEntry = 30
+    public static func getMonthlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
+        let monthlyMinPlaysEntry = threshold
         let period = APITimePeriod.OneMonth.rawValue
 
         return try getFilteredArtists(
@@ -67,8 +82,8 @@ public class FetchArtists {
      - Parameter username: The user to check the top artists for
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
      */
-    public static func getHalfYearlyTopArtists(username: String) throws -> Set<String> {
-        let halfYearlyMinPlaysEntry = 50
+    public static func getHalfYearlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
+        let halfYearlyMinPlaysEntry = threshold
         let period = APITimePeriod.SixMonth.rawValue
 
         return try getFilteredArtists(
@@ -84,8 +99,8 @@ public class FetchArtists {
      - Parameter username: The user to check the top artists for
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
      */
-    public static func getYearlyTopArtists(username: String) throws -> Set<String> {
-        let yearlyMinPlaysEntry = 70
+    public static func getYearlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
+        let yearlyMinPlaysEntry = threshold
         let period = APITimePeriod.TwelveMonth.rawValue
 
         return try getFilteredArtists(
@@ -101,8 +116,8 @@ public class FetchArtists {
      - Parameter username: The user to check the top artists for
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
      */
-    public static func getOverallTopArtists(username: String) throws -> Set<String> {
-        let overallMinPlaysEntry = 100
+    public static func getOverallTopArtists(username: String, threshold: Int) throws -> Set<String> {
+        let overallMinPlaysEntry = threshold
         let period = APITimePeriod.Overall.rawValue
 
         return try getFilteredArtists(

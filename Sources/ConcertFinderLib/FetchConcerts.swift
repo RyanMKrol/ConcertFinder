@@ -24,7 +24,7 @@ public class FetchConcertInformation {
      - returns: A dictionary of artists and their upcoming events
      */
     public static func getArtistsConertInformation(
-        city: String,
+        cities: [String],
         artists: [Artist]
     ) throws -> [String:[Event]] {
 
@@ -39,17 +39,21 @@ public class FetchConcertInformation {
                 let validStatus = concert.isValidStatus()
                 let eventCity = concert.getLocation()
 
-                let regex = try? NSRegularExpression(
-                    pattern: ".*\(city).*",
-                    options: .caseInsensitive
-                )
-                let matches = regex?.numberOfMatches(
-                    in: eventCity,
-                    options: [],
-                    range: NSRange(location: 0, length: eventCity.count)
-                ) ?? 0
+                let matchingCity = cities.map({ (city) -> Bool in
+                    let regex = try? NSRegularExpression(
+                        pattern: ".*\(city).*",
+                        options: .caseInsensitive
+                    )
+                    let matches = regex?.numberOfMatches(
+                        in: eventCity,
+                        options: [],
+                        range: NSRange(location: 0, length: eventCity.count)
+                    ) ?? 0
 
-                return !finished && validStatus && matches > 0
+                    return matches > 0
+                }).contains(true)
+
+                return !finished && validStatus && matchingCity
             }
 
             artistEvents[artist.getName()] = filteredConcertInfo

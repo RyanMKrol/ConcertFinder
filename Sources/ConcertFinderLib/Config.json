@@ -1,0 +1,36 @@
+{
+    "config": {
+        "users": [
+            {
+                "username": "somethingmeaty",
+                "cities": [
+                    "London", "Nottingham", "Birmingham"
+                ],
+                "countries": [
+                    "United Kingdom"
+                ],
+                "listeningThresholds": {
+                    "1month": 30,
+                    "6month": 50,
+                    "1year": 70,
+                    "overall": 100,
+                },
+            },
+            {
+                "username": "wztan",
+                "cities": [
+                    "London", "Nottingham", "Birmingham"
+                ],
+                "countries": [
+                    "United Kingdom"
+                ],
+                "listeningThresholds": {
+                    "1month": 20,
+                    "6month": 35,
+                    "1year": 60,
+                    "overall": 80,
+                },
+            },
+        ]
+    }
+}

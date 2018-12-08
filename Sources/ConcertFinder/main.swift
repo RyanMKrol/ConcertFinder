@@ -8,26 +8,37 @@
 import Foundation
 import ConcertFinderLib
 
-private let username = "somethingmeaty"
-private let city = "London"
-
 do {
-    let artists = try FetchArtists.getFinishedArtistList(username: username)
-    let artistInfo = try FetchArtistInformation.getArtistIds(artistNames: artists)
-    let artistConcertInfo = try FetchConcertInformation.getArtistsConertInformation(
-        city: city,
-        artists: artistInfo
-    )
+    let config = try ConfigLoader.load()
 
-    for artistConcerts in artistConcertInfo {
-        for event in artistConcerts.value {
-            print(event.getLocation())
-            print(event.getDate())
-            print(event.getUrl())
+    for user in config.users {
+        let artists = try FetchArtists.getFinishedArtistList(
+            username: user.username,
+            listeningThresholds: user.listeningThresholds
+        )
+
+        let artistInfo = try FetchArtistInformation.getArtistIds(
+            artistNames: artists
+        )
+
+        let artistConcertInfo = try FetchConcertInformation.getArtistsConertInformation(
+            cities: user.cities,
+            artists: artistInfo
+        )
+
+        for artistConcerts in artistConcertInfo {
+            for event in artistConcerts.value {
+                print(artistConcerts.key)
+                print("==================")
+                print(event.getLocation())
+                print(event.getDate())
+                print(event.getUrl())
+                print("==================")
+                print()
+            }
         }
     }
 
-    print(artistConcertInfo)
 } catch {
     print(error)
 }
