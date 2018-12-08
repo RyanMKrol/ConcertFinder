@@ -40,27 +40,11 @@ public class FetchConcertInformation {
             let filteredConcertInfo = concertInfo.filter { (concert) -> Bool in
                 let finished = concert.isFinished()
                 let validStatus = concert.isValidStatus()
-                let eventCity = concert.getLocation()
-
-                // filter the response using all cities for a user
-                let matchingCity = cities.map({ (city) -> Bool in
-                    var matches = 0
-
-                    // match on both the country and the city
-                    for country in filterCitiesBycountries {
-                        let regex = try? NSRegularExpression(
-                            pattern: ".*\(city).*, \(country).*",
-                            options: .caseInsensitive
-                        )
-                        matches += regex?.numberOfMatches(
-                            in: eventCity,
-                            options: [],
-                            range: NSRange(location: 0, length: eventCity.count)
-                        ) ?? 0
-                    }
-
-                    return matches > 0
-                }).contains(true)
+                let matchingCity = isMatchingCity(
+                    countries: filterCitiesBycountries,
+                    cities: cities,
+                    event: concert
+                )
 
                 return !finished && validStatus && matchingCity
             }
@@ -69,6 +53,36 @@ public class FetchConcertInformation {
         }
 
         return artistEvents
+    }
+
+    private static func isMatchingCity(
+        countries: [String],
+        cities: [String],
+        event: Event
+    ) -> Bool {
+        let eventCity = event.getLocation()
+
+        // filter the response using all cities for a user
+        let isMatchingCity = cities.map({ (city) -> Bool in
+            var matches = 0
+
+            // match on both the country and the city
+            for country in countries {
+                let regex = try? NSRegularExpression(
+                    pattern: ".*\(city).*, \(country).*",
+                    options: .caseInsensitive
+                )
+                matches += regex?.numberOfMatches(
+                    in: eventCity,
+                    options: [],
+                    range: NSRange(location: 0, length: eventCity.count)
+                ) ?? 0
+            }
+
+            return matches > 0
+        }).contains(true)
+
+        return isMatchingCity
     }
 
     /**
