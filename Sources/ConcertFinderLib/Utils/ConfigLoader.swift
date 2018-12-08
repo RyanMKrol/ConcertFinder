@@ -12,6 +12,8 @@ import SwiftyJSON
 
 public class ConfigLoader {
 
+    private init(){}
+
     private static let topLevelConfigKey = "config"
     private static let configFile = "/Users/ryankrol/Desktop/ConcertFinder/Sources/ConcertFinderLib/config.json"
     private static let emailConfigFile = "/Users/ryankrol/Desktop/ConcertFinder/Sources/ConcertFinderLib/emailConfig.json"

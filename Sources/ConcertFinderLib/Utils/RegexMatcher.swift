@@ -10,6 +10,8 @@ import Foundation
 
 public class RegexMatcher {
 
+    private init(){}
+
     /**
      Gets the number of matches for a regex pattern against a string
 
