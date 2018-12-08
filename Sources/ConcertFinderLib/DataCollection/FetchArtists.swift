@@ -13,14 +13,6 @@ public class FetchArtists {
     // API Details
     //  - https://www.last.fm/api/show/user.getTopArtists
 
-    public enum APITimePeriod: String {
-        case Overall = "overall"
-        case TwelveMonth = "12month"
-        case SixMonth = "6month"
-        case ThreeMonth = "3month"
-        case OneMonth = "1month"
-    }
-
     enum APIError: Error {
         case CouldNotBuildURL
         case CouldNotGetData
@@ -34,107 +26,28 @@ public class FetchArtists {
 
      - Parameter username: The user to check the top artists for
      - Parameter listeningThresholds: The thresholds we'll use for a given user
+
      - returns: A set of artists that have been listened to enough times to fulfil the criteria
      - throws: When we fail to get the artist data
      */
     public static func getFinishedArtistList(
         username: String,
-        listeningThresholds: ListeningThresholds
+        listeningThresholds: [String:Int]
     ) throws -> Set<String> {
-        let overallArtists = try getOverallTopArtists(
-            username: username,
-            threshold: listeningThresholds.overall
-        )
-        let yearlyArtists = try getYearlyTopArtists(
-            username: username,
-            threshold: listeningThresholds.oneYear
-        )
-        let halfYearlyArtists = try getHalfYearlyTopArtists(
-            username: username,
-            threshold: listeningThresholds.sixMonth
-        )
-        let monthlyArtists = try getMonthlyTopArtists(
-            username: username,
-            threshold: listeningThresholds.oneMonth
-        )
 
-        return monthlyArtists.union(halfYearlyArtists).union(yearlyArtists).union(overallArtists)
-    }
+        var artists: Set<String> = Set<String>()
 
-    /**
-     Gets the top artists across the user's month year of listening
+        for threshold in listeningThresholds {
+            let newArtists = try getFilteredArtists(
+                username: username,
+                minPlaysThreshold: threshold.value,
+                listeningPeriod: threshold.key
+            )
 
-     - Parameter username: The user to check the top artists for
-     - Parameter threshold: The threshold we'll use for a given user
-     - returns: A set of artists that have been listened to enough times to fulfil the criteria
-     - throws: When we fail to get the artist data
-     */
-    public static func getMonthlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
-        let monthlyMinPlaysEntry = threshold
-        let period = APITimePeriod.OneMonth.rawValue
+            artists = artists.union(newArtists)
+        }
 
-        return try getFilteredArtists(
-            username: username,
-            minPlaysThreshold: monthlyMinPlaysEntry,
-            listeningPeriod: period
-        )
-    }
-
-    /**
-     Gets the top artists across the user's last half-year of listening
-
-     - Parameter username: The user to check the top artists for
-     - Parameter threshold: The threshold we'll use for a given user
-     - returns: A set of artists that have been listened to enough times to fulfil the criteria
-     - throws: When we fail to get the artist data
-     */
-    public static func getHalfYearlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
-        let halfYearlyMinPlaysEntry = threshold
-        let period = APITimePeriod.SixMonth.rawValue
-
-        return try getFilteredArtists(
-            username: username,
-            minPlaysThreshold: halfYearlyMinPlaysEntry,
-            listeningPeriod: period
-        )
-    }
-
-    /**
-     Gets the top artists across the user's last year of listening
-
-     - Parameter username: The user to check the top artists for
-     - Parameter threshold: The threshold we'll use for a given user
-     - returns: A set of artists that have been listened to enough times to fulfil the criteria
-     - throws: When we fail to get the artist data
-     */
-    public static func getYearlyTopArtists(username: String, threshold: Int) throws -> Set<String> {
-        let yearlyMinPlaysEntry = threshold
-        let period = APITimePeriod.TwelveMonth.rawValue
-
-        return try getFilteredArtists(
-            username: username,
-            minPlaysThreshold: yearlyMinPlaysEntry,
-            listeningPeriod: period
-        )
-    }
-
-    /**
-     Gets the top artists across the user's entire listening history
-
-     - Parameter username: The user to check the top artists for
-     - Parameter threshold: The threshold we'll use for a given user
-     - returns: A set of artists that have been listened to enough times to fulfil the criteria
-     - throws: When we fail to get the artist data
-     */
-    public static func getOverallTopArtists(username: String, threshold: Int) throws -> Set<String> {
-        let overallMinPlaysEntry = threshold
-        let period = APITimePeriod.Overall.rawValue
-
-        return try getFilteredArtists(
-            username: username,
-            minPlaysThreshold: overallMinPlaysEntry,
-            listeningPeriod: period
-        )
+        return artists
     }
 
     /**
@@ -143,6 +56,7 @@ public class FetchArtists {
      - Parameter username: The user to check the top artists for
      - Parameter minPlaysThreshold: The threshold, above which artists should be included in the reuslt
      - Parameter listeningPeriod: The time period to check the top artists for
+
      - returns: A set of artists that fit the criteria of song plays
      - throws: When we fail to get the artist data
      */

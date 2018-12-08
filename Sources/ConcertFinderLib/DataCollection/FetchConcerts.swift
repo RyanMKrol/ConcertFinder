@@ -21,6 +21,7 @@ public class FetchConcertInformation {
 
      - Parameter cities: The cities we want to find concerts in
      - Parameter artists: The artists we're finding information for
+
      - returns: A dictionary of artists and their upcoming events
      - throws: When we fail to get the concert data
      */
@@ -70,6 +71,7 @@ public class FetchConcertInformation {
      - Parameter artistId: The artists we're finding information for
      - Parameter pageNum: The page number of the API response we're looking at
      - Parameter results: The accumulator to store our results between API calls
+
      - returns: An array of events for the given artist
      - throws: When we fail to get the concert data
      - note: We're using Tail-Recursion in the hope that the compiler optimises

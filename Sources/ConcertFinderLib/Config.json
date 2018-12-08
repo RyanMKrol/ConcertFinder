@@ -10,11 +10,12 @@
                     "United Kingdom"
                 ],
                 "listeningThresholds": {
-                    "1month": 30,
-                    "6month": 50,
-                    "1year": 70,
-                    "overall": 100,
+                    "1month": 25,
+                    "6month": 40,
+                    "1year": 60,
+                    "overall": 80,
                 },
+                "emailList": ["ryankrol.m@gmail.com"],
             },
             {
                 "username": "wztan",
@@ -30,6 +31,7 @@
                     "1year": 60,
                     "overall": 80,
                 },
+                "emailList": ["ryankrol@hotmail.co.uk"],
             },
         ]
     }

@@ -12,9 +12,13 @@ do {
     let config = try ConfigLoader.load()
 
     for user in config.users {
+
+        print("******************")
+        print("Data for user: \(user.username)")
+
         let artists = try FetchArtists.getFinishedArtistList(
             username: user.username,
-            listeningThresholds: user.listeningThresholds
+            listeningThresholds: user.getListeningThresholds()
         )
 
         let artistInfo = try FetchArtistInformation.getArtistIds(

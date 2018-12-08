@@ -19,18 +19,45 @@ public struct ConfigUser: Decodable {
     public let cities: [String]
     public let username: String
     public let countries: [String]
-    public let listeningThresholds: ListeningThresholds
+    private let listeningThresholds: ListeningThresholds
+
+    public func getListeningThresholds() throws -> [String:Int] {
+        return try self.listeningThresholds.getThresholds()
+    }
 }
 
-public struct ListeningThresholds: Decodable {
+private struct ListeningThresholds: Decodable {
     enum CodingKeys: String, CodingKey {
+        case sevenDay = "7day"
         case oneMonth = "1month"
+        case threeMonth = "3month"
         case sixMonth = "6month"
         case oneYear = "1year"
         case overall = "overall"
     }
-    public let oneMonth: Int
-    public let sixMonth: Int
-    public let oneYear: Int
-    public let overall: Int
+
+    private let sevenDay: Int?
+    private let oneMonth: Int?
+    private let threeMonth: Int?
+    private let sixMonth: Int?
+    private let oneYear: Int?
+    private let overall: Int?
+
+    public func getThresholds() throws -> [String:Int] {
+
+        let dict: [String: Int] = [
+            CodingKeys.sevenDay.rawValue: self.sevenDay,
+            CodingKeys.oneMonth.rawValue: self.oneMonth,
+            CodingKeys.threeMonth.rawValue: self.threeMonth,
+            CodingKeys.sixMonth.rawValue: self.sixMonth,
+            CodingKeys.oneYear.rawValue: self.oneYear,
+            CodingKeys.overall.rawValue: self.overall
+        ].filter({$0.value != nil}) as! [String:Int]
+
+        guard dict.count > 0 else {
+            throw CommonError.NoListeningThresholdsFound
+        }
+
+        return dict
+    }
 }

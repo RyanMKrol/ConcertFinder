@@ -22,6 +22,7 @@ public class ServiceWrapper {
 
      - Parameter urlString: The URL of the API you want to call
      - Parameter responseType: The type of the response you're expecting
+
      - returns: The API response
      - throws: Any exceptions related to calling the API, or parsing the response
      */
@@ -70,7 +71,6 @@ public class ServiceWrapper {
         ) else {
             return completion(.failure(APIError.CouldNotBuildURL))
         }
-
         guard let url = URL(string: urlString) else {
             return completion(.failure(APIError.CouldNotBuildURL))
         }

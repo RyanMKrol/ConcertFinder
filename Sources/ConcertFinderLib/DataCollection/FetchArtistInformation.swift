@@ -19,6 +19,7 @@ public class FetchArtistInformation {
      Retrieves information about an artist
 
      - Parameter artistNames: The names of the artists
+
      - returns: An array of artists, including their names and IDs
      - throws: An exception if the calls to the API fail
      */
