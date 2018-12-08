@@ -1,5 +1,5 @@
 //
-//  SongKickResponse.swift
+//  SongKickResponseError.swift
 //  ConcertFinderLib
 //
 //  Created by Ryan Krol on 07/12/2018.

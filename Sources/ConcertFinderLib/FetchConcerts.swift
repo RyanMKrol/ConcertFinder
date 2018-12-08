@@ -19,10 +19,14 @@ public class FetchConcertInformation {
     /**
      Retrieves upcoming concert information for an artist
 
+     - Parameter city: The city we want to find concerts in
      - Parameter artists: The artists we're finding information for
      - returns: A dictionary of artists and their upcoming events
      */
-    public static func getArtistsConertInformation(city: String, artists: [Artist]) throws -> [String:[Event]] {
+    public static func getArtistsConertInformation(
+        city: String,
+        artists: [Artist]
+    ) throws -> [String:[Event]] {
 
         var artistEvents: [String:[Event]] = [:]
 
@@ -35,7 +39,10 @@ public class FetchConcertInformation {
                 let validStatus = concert.isValidStatus()
                 let eventCity = concert.getLocation()
 
-                let regex = try? NSRegularExpression(pattern: ".*\(city).*", options: .caseInsensitive)
+                let regex = try? NSRegularExpression(
+                    pattern: ".*\(city).*",
+                    options: .caseInsensitive
+                )
                 let matches = regex?.numberOfMatches(
                     in: eventCity,
                     options: [],
@@ -51,8 +58,21 @@ public class FetchConcertInformation {
         return artistEvents
     }
 
-//    using some tail recursion to optimise the stack
-    private static func getConcerts(artistId: Int, pageNum: Int = 1, results: inout [Event]) throws -> [Event] {
+    /**
+     Retrieves upcoming concert information for an artist
+
+     - Parameter artistId: The artists we're finding information for
+     - Parameter pageNum: The page number of the API response we're looking at
+     - Parameter results: The accumulator to store our results between API calls
+     - returns: An array of events for the given artist
+     - note: We're using Tail-Recursion in the hope that the compiler optimises
+     our function stacks for us
+     */
+    private static func getConcerts(
+        artistId: Int,
+        pageNum: Int = 1,
+        results: inout [Event]
+    ) throws -> [Event] {
         let url = "https://api.songkick.com/api/3.0/artists/\(artistId)/calendar.json?apikey=\(apiKey)&page=\(pageNum)"
 
         let concertInfo = try ServiceWrapper.callService(

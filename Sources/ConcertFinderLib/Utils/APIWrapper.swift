@@ -7,7 +7,6 @@
 //  TV: Ashes To Ashes - Season 1 - Episode 8
 
 import Foundation
-import SwiftyJSON
 
 public class ServiceWrapper {
 
@@ -36,7 +35,7 @@ public class ServiceWrapper {
             case .success(let callbackResult):
                 apiResult = callbackResult
             case .failure(let callbackError):
-                print("There's an issue doing something with this: \(responseType)")
+                print("There's an issue doing something with this API type: \(responseType)")
                 error = callbackError
             }
         }
@@ -59,21 +58,27 @@ public class ServiceWrapper {
      - Parameter responseType: The type of the codable we want to find the response in
      - Parameter completion: The callback to call once the data has been handled (or not)
      */
-    private static func call<T: Decodable>(urlString: String, responseType: T.Type, completion: @escaping (Result<T>) -> Void) {
+    private static func call<T: Decodable>(
+        urlString: String,
+        responseType: T.Type,
+        completion: @escaping (Result<T>) -> Void
+    ) {
         let waitTask = DispatchSemaphore(value: 0)
 
-        guard let urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
+        guard let urlString = urlString.addingPercentEncoding(
+            withAllowedCharacters: CharacterSet.urlQueryAllowed
+        ) else {
             return completion(.failure(APIError.CouldNotBuildURL))
         }
 
         guard let url = URL(string: urlString) else {
             return completion(.failure(APIError.CouldNotBuildURL))
         }
-        print(urlString)
+
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
             defer { waitTask.signal() }
-            print(try! JSON.init(data: data!))
+
             completion(Result {
                 guard let data = data else {
                     throw APIError.CouldNotGetData

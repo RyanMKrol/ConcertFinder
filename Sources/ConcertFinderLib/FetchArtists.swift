@@ -126,7 +126,10 @@ public class FetchArtists {
         listeningPeriod: String
     ) throws -> Set<String> {
         let url = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(listeningPeriod)&limit=\(resultLimit)"
-        let topArtists = try ServiceWrapper.callService(urlString: url, responseType: GetTopArtistsResponse.self)
+        let topArtists = try ServiceWrapper.callService(
+            urlString: url,
+            responseType: GetTopArtistsResponse.self
+        )
 
         let validArtistNames = try topArtists.getArtists().filter({ (artist) -> Bool in
             return try artist.getPlayCount() > minPlaysThreshold
