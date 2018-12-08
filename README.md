@@ -18,5 +18,6 @@ A tool to keep you updated with concerts from artists you regularly listen to.
  * You also need to add your mail server details in this [file](https://github.com/RyanMKrol/ConcertFinder/blob/master/Sources/ConcertFinderLib/EmailConfig.json):
    * You can add an application password for gmail accounts [here](https://myaccount.google.com/apppasswords)
    * Then just add the email address for the account you want to use
+ * Update the locations for the config files you're using [here](https://github.com/RyanMKrol/ConcertFinder/blob/master/Sources/ConcertFinderLib/Utils/ConfigLoader.swift#L18)
  * Open the XCode project you generated earlier, and Run!
  * Find your concerts in the output
