@@ -27,6 +27,7 @@ public class FetchConcertInformation {
      */
     public static func getArtistsConertInformation(
         cities: [String],
+        countries: [String],
         artists: [Artist]
     ) throws -> [String:[Event]] {
 
@@ -43,15 +44,20 @@ public class FetchConcertInformation {
 
                 // filter the response using all cities for a user
                 let matchingCity = cities.map({ (city) -> Bool in
-                    let regex = try? NSRegularExpression(
-                        pattern: ".*\(city).*",
-                        options: .caseInsensitive
-                    )
-                    let matches = regex?.numberOfMatches(
-                        in: eventCity,
-                        options: [],
-                        range: NSRange(location: 0, length: eventCity.count)
-                    ) ?? 0
+                    var matches = 0
+
+                    // match on both the country and the city
+                    for country in countries {
+                        let regex = try? NSRegularExpression(
+                            pattern: ".*\(city).*, \(country).*",
+                            options: .caseInsensitive
+                        )
+                        matches += regex?.numberOfMatches(
+                            in: eventCity,
+                            options: [],
+                            range: NSRange(location: 0, length: eventCity.count)
+                        ) ?? 0
+                    }
 
                     return matches > 0
                 }).contains(true)

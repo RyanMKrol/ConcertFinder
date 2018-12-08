@@ -71,6 +71,7 @@ public class ServiceWrapper {
         ) else {
             return completion(.failure(APIError.CouldNotBuildURL))
         }
+        print("expanding this: \(urlString)")
         guard let url = URL(string: urlString) else {
             return completion(.failure(APIError.CouldNotBuildURL))
         }
