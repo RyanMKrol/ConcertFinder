@@ -15,7 +15,7 @@ public class EmailClient {
     private let client: SMTP
 
     public init(config: EmailConfig) {
-        self.fromEmail = Mail.User(email: config.emailAccount)
+        self.fromEmail = Mail.User(name: "ConcertFinder", email: config.emailAccount)
         self.client = SMTP(
             hostname: config.hostName,
             email: config.emailAccount,
