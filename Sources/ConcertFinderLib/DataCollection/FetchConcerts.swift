@@ -7,6 +7,7 @@
 //  TV: Ashes To Ashes - Season 2 - Episode 1
 
 import Foundation
+import SwiftToolbox
 
 public class FetchConcertInformation {
 
@@ -80,7 +81,7 @@ public class FetchConcertInformation {
 
             // match on both the country and the city
             for country in countries {
-                matches += RegexMatcher.numMatches(pattern: ".*\(country).*", target: eventCity)
+                matches += RegexUtils.numMatches(pattern: ".*\(country).*", target: eventCity)
             }
 
             return matches > 0
@@ -113,7 +114,7 @@ public class FetchConcertInformation {
 
                 // match on both the country and the city
                 for country in countries {
-                    matches += RegexMatcher.numMatches(
+                    matches += RegexUtils.numMatches(
                         pattern: ".*\(city).*, \(country).*",
                         target: eventCity
                     )
@@ -121,7 +122,7 @@ public class FetchConcertInformation {
             } else {
 
                 // match on just the city
-                matches += RegexMatcher.numMatches(
+                matches += RegexUtils.numMatches(
                     pattern: ".*\(city).*.*",
                     target: eventCity
                 )
