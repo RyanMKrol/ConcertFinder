@@ -21,6 +21,8 @@ public class FetchConcertInformation {
      Retrieves upcoming concert information for an artist
 
      - Parameter cities: The cities we want to find concerts in
+     - Parameter filterCitiesBycountries: Filter the cities by the country they should be in
+     - Parameter countries: The countries to search for concerts in
      - Parameter artists: The artists we're finding information for
 
      - returns: A dictionary of artists and their upcoming events
