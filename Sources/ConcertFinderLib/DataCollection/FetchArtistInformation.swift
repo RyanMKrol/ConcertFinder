@@ -7,6 +7,7 @@
 //  TV: Ashes To Ashes - Season 1 - Episode 7
 
 import Foundation
+import SwiftToolbox
 
 public class FetchArtistInformation {
 
@@ -28,11 +29,19 @@ public class FetchArtistInformation {
         // Occasionally we can't find the user we want from the API, so we put nil in this list, and
         //  then use compactMap to filter out the missing users
         let artists:[Artist] = try artistNames.map { (name) -> Artist? in
-            let url = "https://api.songkick.com/api/3.0/search/artists.json?apikey=\(apiKey)&query=\(name)"
-            let artistInfo = try ServiceWrapper.callService(
-                urlString: url,
-                responseType: FetchArtistInformationResponse.self
-            )
+
+            let rawUrl = "https://api.songkick.com/api/3.0/search/artists.json?apikey=\(apiKey)&query=\(name)"
+
+            guard let url = rawUrl.addingPercentEncoding(
+                withAllowedCharacters: CharacterSet.urlQueryAllowed
+            ) else {
+                throw CommonErrors.CouldNotBuildURL
+            }
+
+            var dataHandler = FetchArtistInformationDataHandler(url: URL(string: url)!)
+            try InteractionHandler.fetch(dataHandler: &dataHandler)
+
+            let artistInfo = try dataHandler.getData()
 
             guard artistInfo.isValidStatus() else {
                 throw SongKickResponseError.StatusNotOK(

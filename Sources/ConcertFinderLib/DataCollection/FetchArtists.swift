@@ -7,6 +7,7 @@
 //  TV: Life On Mars - Season 2 - Episode 8
 
 import Foundation
+import SwiftToolbox
 
 public class FetchArtists {
 
@@ -65,12 +66,12 @@ public class FetchArtists {
         minPlaysThreshold: Int,
         listeningPeriod: String
     ) throws -> Set<String> {
-        let url = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(listeningPeriod)&limit=\(resultLimit)"
-        let topArtists = try ServiceWrapper.callService(
-            urlString: url,
-            responseType: GetTopArtistsResponse.self
-        )
+        let url         = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(listeningPeriod)&limit=\(resultLimit)"
+        var dataHandler = FetchArtistsDataHandler(url: URL(string: url)!)
 
+        try InteractionHandler.fetch(dataHandler: &dataHandler)
+
+        let topArtists       = try dataHandler.getData()
         let validArtistNames = try topArtists.getArtists().filter({ (artist) -> Bool in
             return try artist.getPlayCount() > minPlaysThreshold
         }).map({$0.getName()})
