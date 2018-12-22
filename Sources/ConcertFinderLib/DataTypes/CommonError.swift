@@ -9,8 +9,6 @@
 import Foundation
 
 public enum CommonError: Error {
-    case CouldNotLoadAppConfig
-    case CouldNotLoadEmailConfig
     case NoListeningThresholdsFound(response: String)
     case NoMatchingLocations(response: String)
 }

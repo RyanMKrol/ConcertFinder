@@ -9,11 +9,14 @@ import Foundation
 import ConcertFinderLib
 import SwiftToolbox
 
+let configFile = "/Users/ryankrol/Desktop/ToolboxProjects/ConcertFinder/Sources/ConcertFinderLib/config.json"
+let emailConfigFile = "/Users/ryankrol/Desktop/ToolboxProjects/ConcertFinder/Sources/ConcertFinderLib/emailConfig.json"
+
 do {
 
-    let config = try ConfigLoader.loadAppConfig()
+    let config = try ConfigHandler<Config>(configFile: configFile).load()
+    let emailConfig = try ConfigHandler<EmailConfig>(configFile: emailConfigFile).load()
 
-    let emailConfig = try ConfigLoader.loadEmailConfig()
     let emailClient = EmailClient(config: emailConfig)
 
     for user in try config.getUsers() {
