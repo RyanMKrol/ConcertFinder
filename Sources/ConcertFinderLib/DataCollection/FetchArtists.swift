@@ -67,7 +67,9 @@ public class FetchArtists {
         listeningPeriod: String
     ) throws -> Set<String> {
         let url         = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(listeningPeriod)&limit=\(resultLimit)"
-        var dataHandler = FetchArtistsDataHandler(url: URL(string: url)!)
+        var dataHandler = APIDataHandler<GetTopArtistsResponse>(
+            url: URL(string: url)!
+        )
 
         try InteractionHandler.fetch(dataHandler: &dataHandler)
 

@@ -152,7 +152,11 @@ public class FetchConcertInformation {
         results: inout [Event]
     ) throws -> [Event] {
         let url = "https://api.songkick.com/api/3.0/artists/\(artistId)/calendar.json?apikey=\(apiKey)&page=\(pageNum)"
-        var dataHandler = FetchConcertsDataHandler(url: URL(string: url)!)
+
+        var dataHandler = APIDataHandler<FetchConcertInformationResponse>(
+            url: URL(string: url)!
+        )
+
         try InteractionHandler.fetch(dataHandler: &dataHandler)
         let concertInfo = try dataHandler.getData()
 

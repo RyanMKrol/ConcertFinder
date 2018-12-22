@@ -38,7 +38,10 @@ public class FetchArtistInformation {
                 throw CommonErrors.CouldNotBuildURL
             }
 
-            var dataHandler = FetchArtistInformationDataHandler(url: URL(string: url)!)
+            var dataHandler = APIDataHandler<FetchArtistInformationResponse>(
+                url: URL(string: url)!
+            )
+
             try InteractionHandler.fetch(dataHandler: &dataHandler)
 
             let artistInfo = try dataHandler.getData()
