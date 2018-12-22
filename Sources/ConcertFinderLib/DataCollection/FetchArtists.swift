@@ -67,27 +67,16 @@ public class FetchArtists {
         listeningPeriod: String
     ) throws -> Set<String> {
 
-        let topArtists       = try fetchArtist(username: username, listeningPeriod: listeningPeriod)
+        let url = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(listeningPeriod)&limit=\(resultLimit)"
+
+        let topArtists = try InteractionHandler.fetch(
+            dataHandler: APIDataHandler<GetTopArtistsResponse>(url: URL(string: url)!)
+        )
 
         let validArtistNames = try topArtists.getArtists().filter({ (artist) -> Bool in
             return try artist.getPlayCount() > minPlaysThreshold
         }).map({$0.getName()})
 
         return Set(validArtistNames)
-    }
-
-    private static func fetchArtist(
-        username: String,
-        listeningPeriod: String
-    ) throws -> GetTopArtistsResponse {
-
-        let url         = "http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=\(username)&api_key=\(apiKey)&format=json&period=\(listeningPeriod)&limit=\(resultLimit)"
-        var dataHandler = APIDataHandler<GetTopArtistsResponse>(
-            url: URL(string: url)!
-        )
-
-        try InteractionHandler.fetch(dataHandler: &dataHandler)
-
-        return try dataHandler.getData()
     }
 }

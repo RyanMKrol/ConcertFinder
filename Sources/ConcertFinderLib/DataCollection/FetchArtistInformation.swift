@@ -30,7 +30,17 @@ public class FetchArtistInformation {
         //  then use compactMap to filter out the missing users
         let artists:[Artist] = try artistNames.map { (name) -> Artist? in
 
-            let artistInfo = try fetchArtistInfo(artistName: name)
+            let rawUrl = "https://api.songkick.com/api/3.0/search/artists.json?apikey=\(apiKey)&query=\(name)"
+
+            guard let url = rawUrl.addingPercentEncoding(
+                withAllowedCharacters: CharacterSet.urlQueryAllowed
+            ) else {
+                throw CommonErrors.CouldNotBuildURL
+            }
+
+            let artistInfo = try InteractionHandler.fetch(
+                dataHandler: APIDataHandler<FetchArtistInformationResponse>(url: URL(string: url)!)
+            )
 
             guard artistInfo.isValidStatus() else {
                 throw SongKickResponseError.StatusNotOK(
@@ -46,25 +56,5 @@ public class FetchArtistInformation {
         }.compactMap({$0})
 
         return artists
-    }
-
-    private static func fetchArtistInfo(artistName: String) throws -> FetchArtistInformationResponse {
-
-        let rawUrl = "https://api.songkick.com/api/3.0/search/artists.json?apikey=\(apiKey)&query=\(artistName)"
-
-        guard let url = rawUrl.addingPercentEncoding(
-            withAllowedCharacters: CharacterSet.urlQueryAllowed
-            ) else {
-                throw CommonErrors.CouldNotBuildURL
-        }
-
-        var dataHandler = APIDataHandler<FetchArtistInformationResponse>(
-            url: URL(string: url)!
-        )
-
-        try InteractionHandler.fetch(dataHandler: &dataHandler)
-
-        return try dataHandler.getData()
-
     }
 }

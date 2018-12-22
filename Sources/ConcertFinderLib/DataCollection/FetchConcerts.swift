@@ -152,7 +152,11 @@ public class FetchConcertInformation {
         results: inout [Event]
     ) throws -> [Event] {
 
-        let concertInfo = try fetchConcerts(artistId: artistId, pageNum: pageNum)
+        let url = "https://api.songkick.com/api/3.0/artists/\(artistId)/calendar.json?apikey=\(apiKey)&page=\(pageNum)"
+
+        let concertInfo = try InteractionHandler.fetch(
+            dataHandler: APIDataHandler<FetchConcertInformationResponse>(url: URL(string: url)!)
+        )
 
         guard concertInfo.isValidStatus() else {
             throw SongKickResponseError.StatusNotOK(
@@ -174,18 +178,5 @@ public class FetchConcertInformation {
         return results
     }
 
-    private static func fetchConcerts(artistId: Int, pageNum: Int) throws -> FetchConcertInformationResponse {
-
-        let url = "https://api.songkick.com/api/3.0/artists/\(artistId)/calendar.json?apikey=\(apiKey)&page=\(pageNum)"
-
-        var dataHandler = APIDataHandler<FetchConcertInformationResponse>(
-            url: URL(string: url)!
-        )
-
-        try InteractionHandler.fetch(dataHandler: &dataHandler)
-
-        return try dataHandler.getData()
-
-    }
 }
 
