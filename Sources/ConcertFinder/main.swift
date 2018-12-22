@@ -17,7 +17,7 @@ do {
     let config = try ConfigHandler<Config>(configFile: configFile).load()
     let emailConfig = try ConfigHandler<EmailConfig>(configFile: emailConfigFile).load()
 
-    let emailClient = EmailClient(config: emailConfig)
+    let emailClient = EmailHandler(config: emailConfig)
 
     for user in try config.getUsers() {
 
@@ -53,7 +53,13 @@ do {
             }
         }
 
-        emailClient.sendMail(emailList: user.emailList, content: emailContent)
+        emailClient.sendMail(
+            coreUser: user.emailList.first!,
+            subject: "Concerts for the week",
+            emailList: Array(user.emailList.dropFirst()),
+            content: emailContent
+        )
+
     }
 
 } catch {
