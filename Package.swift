@@ -6,7 +6,7 @@ let package = Package(
     name: "ConcertFinder",
     dependencies: [
         .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", .upToNextMajor(from: "4.2.0")),
-        .package(url: "https://github.com/RyanMKrol/SwiftToolbox.git", .branch("master")),
+        .package(url: "https://github.com/RyanMKrol/SwiftToolbox.git", .upToNextMajor(from: "1.0.0")),
     ],
     targets: [
         .target(
