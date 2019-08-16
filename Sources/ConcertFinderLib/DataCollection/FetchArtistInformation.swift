@@ -7,7 +7,10 @@
 //  TV: Ashes To Ashes - Season 1 - Episode 7
 
 import Foundation
-import SwiftToolbox
+
+import class SwiftToolbox.APIDataHandler
+import class SwiftToolbox.InteractionHandler
+import enum SwiftToolbox.CommonErrors
 
 public class FetchArtistInformation {
 

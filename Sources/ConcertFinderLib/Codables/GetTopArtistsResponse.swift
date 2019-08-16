@@ -7,7 +7,8 @@
 //  TV: Ashes To Ashes - Season 1 - Episode 2
 
 import Foundation
-import SwiftyJSON
+
+import struct SwiftyJSON.JSON
 
 enum ResponseError: Error {
     case NoRank

@@ -7,7 +7,9 @@
 //  TV: Life On Mars - Season 2 - Episode 8
 
 import Foundation
-import SwiftToolbox
+
+import class SwiftToolbox.APIDataHandler
+import class SwiftToolbox.InteractionHandler
 
 public class FetchArtists {
 

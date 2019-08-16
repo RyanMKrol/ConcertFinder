@@ -6,8 +6,12 @@
 //
 
 import Foundation
+
 import ConcertFinderLib
-import SwiftToolbox
+import class SwiftToolbox.ConfigHandler
+import class SwiftToolbox.EmailHandler
+import class SwiftToolbox.StringUtils
+import struct SwiftToolbox.EmailConfig
 
 let configFile = "/Users/ryankrol/Desktop/ToolboxProjects/ConcertFinder/Sources/ConcertFinderLib/config.json"
 let emailConfigFile = "/Users/ryankrol/Desktop/ToolboxProjects/ConcertFinder/Sources/ConcertFinderLib/emailConfig.json"
