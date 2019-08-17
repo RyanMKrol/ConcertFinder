@@ -13,13 +13,13 @@ import class SwiftToolbox.EmailHandler
 import class SwiftToolbox.StringUtils
 import struct SwiftToolbox.EmailConfig
 
-let configFile = "/Users/ryankrol/Desktop/ToolboxProjects/ConcertFinder/Sources/ConcertFinderLib/config.json"
-let emailConfigFile = "/Users/ryankrol/Desktop/ToolboxProjects/ConcertFinder/Sources/ConcertFinderLib/emailConfig.json"
+let configFile = "./../../ConcertFinderLib/Config.json"
+let emailConfigFile = "./../../ConcertFinderLib/EmailConfig.json"
 
 do {
 
-    let config = try ConfigHandler<Config>(configFile: configFile).load()
-    let emailConfig = try ConfigHandler<EmailConfig>(configFile: emailConfigFile).load()
+    let config = try ConfigHandler<Config>(configFile: configFile, relativeFrom: #file).load()
+    let emailConfig = try ConfigHandler<EmailConfig>(configFile: emailConfigFile, relativeFrom: #file).load()
 
     let emailClient = EmailHandler(config: emailConfig)
 
