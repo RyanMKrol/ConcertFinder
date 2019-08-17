@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/RyanMKrol/ConcertFinder.svg?branch=master)](https://travis-ci.org/RyanMKrol/ConcertFinder)
+
 # ConcertFinder
 
 ## Overview
