@@ -1,0 +1,8 @@
+language: swift
+os: osx
+osx_image: xcode10.3
+before_script:
+- swift package generate-xcodeproj
+xcode_project: ConcertFinder.xcodeproj
+xcode_scheme: ConcertFinder-Package
+xcode_destination: platform=macOS
