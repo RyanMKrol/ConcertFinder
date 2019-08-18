@@ -8,3 +8,8 @@ before_install:
 - openssl enc -aes-256-cbc -d -in Sources/Config/Config.json.enc -out Sources/Config/Config.json -k $AES_PASS
 - openssl enc -aes-256-cbc -d -in Sources/Config/EmailConfig.json.enc -out Sources/Config/EmailConfig.json -k $AES_PASS
 - swift package generate-xcodeproj
+deploy:
+  provider: script
+  script: bash .docker_push $AES_PASS
+  on:
+    branch: master
