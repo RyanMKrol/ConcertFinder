@@ -1,8 +1,10 @@
 language: swift
 os: osx
 osx_image: xcode10.3
-before_script:
-- swift package generate-xcodeproj
 xcode_project: ConcertFinder.xcodeproj
 xcode_scheme: ConcertFinder-Package
 xcode_destination: platform=macOS
+before_install:
+- openssl enc -aes-256-cbc -d -in Sources/Config/Config.json.enc -out Sources/Config/Config.json -k $AES_PASS
+- openssl enc -aes-256-cbc -d -in Sources/Config/EmailConfig.json.enc -out Sources/Config/EmailConfig.json -k $AES_PASS
+- swift package generate-xcodeproj
