@@ -1,0 +1,9 @@
+#!/bin/bash
+
+AES_PASS=$1
+
+openssl enc -aes-256-cbc -d -in Sources/Config/awsKeypair.pem.enc -out Sources/Config/awsKeypair.pem -k $AES_PASS
+
+chmod 400 Sources/Config/awsKeypair.pem
+
+ssh -o "StrictHostKeyChecking no" -i Sources/Config/awsKeypair.pem  ec2-user@ec2-3-16-81-16.us-east-2.compute.amazonaws.com "bash ~/deploy-concert-finder-image.sh $AES_PASS"
